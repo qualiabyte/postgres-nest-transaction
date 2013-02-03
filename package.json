@@ -1,0 +1,34 @@
+{
+  "name": "pg-transaction",
+  "version": "0.0.0",
+  "description": "Nest transactions easily with PostgreSQL.",
+  "keywords": [
+    "PostgreSQL",
+    "transactions",
+    "pg",
+    "nested",
+    "anonymous"
+  ],
+  "author": "Tyler Florez <qualiabyte@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/qualiabyte/pg-transaction.git"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "coffee-script": "~1.4.0",
+    "docco": "~0.4.0",
+    "mocha": "~1.7.4",
+    "pg": "~0.9.0",
+    "should": "~1.2.1",
+    "sweeten-docco": "~0.3.3"
+  },
+  "main": "lib/transaction.js",
+  "scripts": {
+    "clean": "rm -rf docs lib;",
+    "prepublish": "coffee -c -o lib *.coffee; docco *.coffee && sweeten-docco",
+    "test": "mocha --compilers coffee:coffee-script test/*.coffee"
+  },
+  "license": "MIT"
+}
