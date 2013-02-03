@@ -1,0 +1,7 @@
+
+# Exclude node modules.
+node_modules/
+
+# Exclude generated docs and compiled JavaScript.
+docs/
+lib/
