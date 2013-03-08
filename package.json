@@ -1,5 +1,5 @@
 {
-  "name": "pg-transaction",
+  "name": "pg-nest",
   "version": "0.0.0",
   "description": "Nest transactions easily with PostgreSQL.",
   "keywords": [
@@ -12,7 +12,7 @@
   "author": "Tyler Florez <qualiabyte@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/qualiabyte/node-postgres-transaction.git"
+    "url": "git://github.com/qualiabyte/postgres-nested-transaction.git"
   },
   "dependencies": {
   },

@@ -1,4 +1,5 @@
-# node-postgres-transaction
+
+# postgres-nested-transaction
 
 Nest transactions easily with PostgreSQL & Node.js. Designed for use with [pg][pg] on npm.
 [pg]: https://github.com/brianc/node-postgres
@@ -6,14 +7,14 @@ Nest transactions easily with PostgreSQL & Node.js. Designed for use with [pg][p
 ## Install
 
 ```shell
-$ npm install pg-transaction
+$ npm install pg-nest
 ```
 
 ## Example
 
 ```coffee
 pg          = require 'pg'
-Transaction = require 'pg-transaction'
+Transaction = require 'pg-nest'
 
 # Create a client connection the postgres database.
 client = pg.connect 'postgres://user:pass@localhost:5432/database'
@@ -106,7 +107,7 @@ Creates a new transaction, using the given pg client.
 
 ```coffee
 pg          = require 'pg'
-Transaction = require 'pg-transaction'
+Transaction = require 'pg-nest'
 
 client = pg.connect "postgres://user:password@localhost:5432/db"
 t = new Transaction( client )

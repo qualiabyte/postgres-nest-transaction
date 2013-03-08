@@ -13,7 +13,7 @@ class Transaction
   # Example:
   #
   #     pg          = require 'pg'
-  #     Transaction = require 'pg-transaction'
+  #     Transaction = require 'pg-nest'
   #
   #     client = pg.connect "postgres://user:password@localhost:5432/db"
   #     t = new Transaction( client )
