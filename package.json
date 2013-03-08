@@ -26,9 +26,9 @@
   },
   "main": "lib/transaction.js",
   "scripts": {
-    "clean": "rm -rf docs lib;",
-    "prepublish": "coffee -c -o lib *.coffee; docco *.coffee && sweeten-docco",
-    "test": "mocha --compilers coffee:coffee-script test/*.coffee"
+    "clean": "make clean",
+    "prepublish": "make all",
+    "test": "make test"
   },
   "license": "MIT"
 }
