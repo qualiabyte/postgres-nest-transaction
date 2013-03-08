@@ -12,7 +12,7 @@
   "author": "Tyler Florez <qualiabyte@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/qualiabyte/postgres-nested-transaction.git"
+    "url": "git://github.com/qualiabyte/postgres-nest-transaction.git"
   },
   "dependencies": {
   },

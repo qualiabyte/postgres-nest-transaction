@@ -1,5 +1,5 @@
 
-# postgres-nested-transaction
+# postgres-nest-transaction
 
 Nest transactions easily with PostgreSQL & Node.js. Designed for use with [pg][pg] on npm.
 [pg]: https://github.com/brianc/node-postgres
