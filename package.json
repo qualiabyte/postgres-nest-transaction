@@ -12,7 +12,7 @@
   "author": "Tyler Florez <qualiabyte@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/qualiabyte/pg-transaction.git"
+    "url": "git://github.com/qualiabyte/node-postgres-transaction.git"
   },
   "dependencies": {
   },
