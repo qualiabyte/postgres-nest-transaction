@@ -257,3 +257,6 @@ t.query "INSERT INTO Foo VALUES ('bar', 'baz');", (lastErr) ->
 + `lastErr` *Error* If present then .cancel(), otherwise .finish().
 + `callback(err)` *Function* Called on completion or error.
 
+
+## License
+MIT
