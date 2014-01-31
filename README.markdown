@@ -38,6 +38,21 @@ t.start (err) ->
             console.log 'Saved Finn!' unless err
 ```
 
+### Example with Client Pooling
+
+```coffee
+# Retrieve a pooled client connection.
+pg.connect url, (err, client, done) ->
+  return callback err if err
+
+  # Transaction will release the client on completion.
+  t = new Transaction( client, done )
+  t.start (err) ->
+    t.query "INSERT INTO Characters VALUES ('Lady', 'rainicorn')", (err, result) ->
+      t.finish (err) ->
+        console.log 'Released client!' unless err
+```
+
 ## API Overview
 
 <table>
