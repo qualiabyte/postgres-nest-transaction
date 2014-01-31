@@ -15,12 +15,12 @@
     "url": "git://github.com/qualiabyte/postgres-nest-transaction.git"
   },
   "dependencies": {
+    "pg": ">=1.0.0"
   },
   "devDependencies": {
     "coffee-script": "~1.4.0",
     "docco": "~0.6.2",
     "mocha": "~1.7.4",
-    "pg": "~0.9.0",
     "should": "~1.2.1",
     "sweeten-docco": "~0.3.3"
   },
