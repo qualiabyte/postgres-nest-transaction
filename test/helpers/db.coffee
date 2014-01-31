@@ -50,7 +50,7 @@ class DB
   # Transaction helper provides a transaction.
   @withTransaction: withTransaction = (callback) ->
     withClient (client, done) ->
-      t = new Transaction client, null, done
+      t = new Transaction client, done
       return callback t
 
   # StartedTransaction helper provides a started transaction.

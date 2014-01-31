@@ -18,7 +18,7 @@ describe 'Transaction', ->
   describe 'new Transaction( client )', ->
     it 'should create a new transaction', (done) ->
       withClient (client, done2) ->
-        t = new Transaction client, null, done2
+        t = new Transaction client, done2
         t.should.be.an.instanceof Transaction
         t.client.should.equal client
         should.not.exist t.parent
@@ -27,7 +27,7 @@ describe 'Transaction', ->
   describe 'new Transaction( client, parent )', ->
     it 'should create a new nested transaction', (done) ->
       withClient (client, done2) ->
-        t1 = new Transaction client, null, done2
+        t1 = new Transaction client, done2
         t2 = new Transaction client, t1, done2
         t2.parent.should.equal t1
         t2.client.should.equal t1.client
@@ -36,7 +36,7 @@ describe 'Transaction', ->
   describe 'transaction.start()', ->
     it 'should start a new transaction', (done) ->
       withClient (client, done2) ->
-        t = new Transaction client, null, done2
+        t = new Transaction client, done2
         t.start (err) ->
           should.not.exist err
           done()

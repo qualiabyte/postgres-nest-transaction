@@ -22,12 +22,25 @@ class Transaction
   #       t.query "SELECT * FROM Characters", (err, result) ->
   #         console.log result.rows
   #
+  # Example with client pooling:
+  #
+  #     pg.connect url, (err, client, done) ->
+  #       return callback err if err
+  #
+  #       t = new Transaction( client, done )
+  #       t.start (err) ->
+  #         t.query "SELECT * FROM Characters", (err, result) ->
+  #           console.log result.rows
+  #
   # @api public
   # @param [pg.Client] client To use for this transaction.
   # @param [Transaction] parent An optional parent (for subtransactions).
   # @param [Function] done Releases the pooled client. See `pg.connect()`
   # @return [Transaction] The new instance.
-  constructor: (@client, @parent=null, @done) ->
+  constructor: (@client, @parent=null, @done=null) ->
+    if arguments.length is 2 and typeof @parent is 'function'
+      @done = arguments[1]
+      @parent = null
 
   # Prints the given arguments when in debug mode.
   # @api private
