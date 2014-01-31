@@ -67,6 +67,10 @@ pg.connect url, (err, client, done) ->
   <td><i>Creates a new transaction, using the given pg client.</i></td>
 </tr>
 <tr>
+  <td><code>new Transaction( client, done )</code></td>
+  <td><i>Creates a new transaction, using a pooled pg client.</i></td>
+</tr>
+<tr>
   <th colspan=2 align=left><a href="#start">Start / Nest</a></th>
 </tr>
 <tr>
@@ -117,6 +121,7 @@ pg.connect url, (err, client, done) ->
 <a name="constructor"></a>
 
 ### new Transaction(client)
+### new Transaction(client, done)
 
 Creates a new transaction, using the given pg client.
 
@@ -127,6 +132,17 @@ Transaction = require 'pg-nest'
 client = pg.connect "postgres://user:password@localhost:5432/db"
 t = new Transaction( client )
 ```
+
+When using client pooling, also pass the `done()` function provided by
+async calls to `pg.connect()`.
+
+```coffee
+pg.connect url, (err, client, done) ->
+  t = new Transaction( client, done )
+```
+
+See the [pg docs](https://github.com/brianc/node-postgres/wiki/pg) on
+`pg.connect()` for details.
 
 <a name="start"></a>
 
