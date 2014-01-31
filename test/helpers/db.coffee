@@ -11,14 +11,15 @@ class DB
 
   # Client helper provides a pooled pg client.
   @withClient: withClient = (callback) ->
-    pg.connect pgUrl, (err, client) ->
+    pg.connect pgUrl, (err, client, done) ->
       should.not.exist err
       should.exist client
-      return callback client
+      should.exist done
+      return callback client, done
 
   # Init schema helper initializes transaction test tables.
   @initSchema: initSchema = (callback) ->
-    withClient (client) ->
+    withClient (client, done) ->
       query = """
         DROP TABLE IF EXISTS Characters;
         CREATE TABLE Characters (
@@ -31,23 +32,25 @@ class DB
         """
       client.query query, (err) ->
         should.not.exist err
+        done()
         return callback()
 
   # Clear all helper resets the transaction test table.
   @clearAll: clearAll = (callback) ->
-    withClient (client) ->
+    withClient (client, done) ->
       query = """
         TRUNCATE Characters
         RESTART IDENTITY CASCADE;
         """
       client.query query, (err) ->
         should.not.exist err
+        done()
         return callback()
 
   # Transaction helper provides a transaction.
   @withTransaction: withTransaction = (callback) ->
-    withClient (client) ->
-      t = new Transaction client
+    withClient (client, done) ->
+      t = new Transaction client, null, done
       return callback t
 
   # StartedTransaction helper provides a started transaction.

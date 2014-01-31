@@ -17,8 +17,8 @@ describe 'Transaction', ->
 
   describe 'new Transaction( client )', ->
     it 'should create a new transaction', (done) ->
-      withClient (client) ->
-        t = new Transaction client
+      withClient (client, done2) ->
+        t = new Transaction client, null, done2
         t.should.be.an.instanceof Transaction
         t.client.should.equal client
         should.not.exist t.parent
@@ -26,30 +26,37 @@ describe 'Transaction', ->
 
   describe 'new Transaction( client, parent )', ->
     it 'should create a new nested transaction', (done) ->
-      withClient (client) ->
-        t1 = new Transaction client
-        t2 = new Transaction client, t1
+      withClient (client, done2) ->
+        t1 = new Transaction client, null, done2
+        t2 = new Transaction client, t1, done2
         t2.parent.should.equal t1
         t2.client.should.equal t1.client
         done()
 
   describe 'transaction.start()', ->
     it 'should start a new transaction', (done) ->
-      withClient (client) ->
-        t = new Transaction client
+      withClient (client, done2) ->
+        t = new Transaction client, null, done2
         t.start (err) ->
           should.not.exist err
           done()
 
     it 'should start a new nested transaction', (done) ->
       withStartedTransaction (t1) ->
-        t2 = new Transaction t1.client, t1
+        t2 = new Transaction t1.client, t1, t1.done
         t2.start (err) ->
           should.not.exist err
           done()
 
   describe 'transaction.nest( callback(err, nested) )', ->
     it 'should start a nested subtransaction', (done) ->
+      withStartedTransaction (t) ->
+        withCharacter 'Finn', t, ->
+          t.finish (err) ->
+            should.not.exist err
+            done()
+
+    it 'should complete a nested subtransaction', (done) ->
       withStartedTransaction (t) ->
         withCharacter 'Finn', t, ->
           t.nest (er1, t2) ->
@@ -180,11 +187,12 @@ describe 'Transaction', ->
         withCharacter 'Finn', t, ->
           t.finalize null, (err) ->
             should.not.exist err
-            withClient (client) ->
+            withClient (client, done2) ->
               client.query "SELECT * FROM Characters", (err, result) ->
                 should.not.exist err
                 result.rows.length.should.equal 1
                 result.rows[0].name.should.equal 'Finn'
+                done2()
                 done()
 
     it 'should rollback and propagate lastErr if not null', (done) ->
@@ -193,10 +201,11 @@ describe 'Transaction', ->
           lastErr = new Error("Dummy error.")
           t.finalize lastErr, (err) ->
             should.exist err
-            withClient (client) ->
+            withClient (client, done2) ->
               client.query "SELECT * FROM Characters", (err, result) ->
                 should.not.exist err
                 result.rows.length.should.equal 0
+                done2()
                 done()
 
     it 'does callback without error if commit already cancelled', (done) ->
@@ -207,8 +216,9 @@ describe 'Transaction', ->
             lastErr = null
             t.finalize lastErr, (err) ->
               should.throws -> should.exist err
-              withClient (client) ->
+              withClient (client, done2) ->
                 client.query "SELECT * FROM Characters", (err, result) ->
                   should.not.exist err
                   result.rows.length.should.equal 0
+                  done2()
                   done()

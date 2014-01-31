@@ -25,8 +25,9 @@ class Transaction
   # @api public
   # @param [pg.Client] client To use for this transaction.
   # @param [Transaction] parent An optional parent (for subtransactions).
+  # @param [Function] done Releases the pooled client. See `pg.connect()`
   # @return [Transaction] The new instance.
-  constructor: (@client, @parent=null) ->
+  constructor: (@client, @parent=null, @done) ->
 
   # Prints the given arguments when in debug mode.
   # @api private
@@ -43,7 +44,6 @@ class Transaction
   # @api public
   # @param [Function] callback(err)
   start: (callback) ->
-    @client.pauseDrain()
     @savepoint = @genSavepoint()
     if @parent?
     then @query "SAVEPOINT \"#{@savepoint}\";", callback
@@ -157,7 +157,7 @@ class Transaction
   # @api public
   # @param [Function] callback(err)
   cancelAll: (callback) ->
-    @query "ROLLBACK", callback
+    @query("ROLLBACK", callback); @done?()
 
   # Completes work on this transaction.
   #
@@ -172,7 +172,7 @@ class Transaction
   finish: (callback) ->
     if @parent?
     then @releaseSavepoint callback
-    else @query("COMMIT", callback); @client.resumeDrain()
+    else @query("COMMIT", callback); @done?()
 
   # Finalizes (finish or cancel) this transaction depending on a final error.
   # 
