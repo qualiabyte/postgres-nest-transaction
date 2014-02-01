@@ -41,7 +41,7 @@ class Transaction
 
   # Starts the new (or nested) transaction, with an auto savepoint.
   #
-  #     t = new Transaction client
+  #     t = new Transaction client, done
   #     t.start (err) ->
   #       t.query "SELECT * FROM Characters", (err, result) ->
   #         console.log result.rows

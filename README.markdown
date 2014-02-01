@@ -128,7 +128,7 @@ See the [pg docs](https://github.com/brianc/node-postgres/wiki/pg) on
 Starts the new (or nested) transaction, with an auto savepoint.
 
 ```coffee
-t = new Transaction client
+t = new Transaction client, done
 t.start (err) ->
   t.query "SELECT * FROM Characters", (err, result) ->
     console.log result.rows
@@ -141,7 +141,7 @@ Starts a nested subtransaction, with its own savepoint.
 Since PostgreSQL lacks true subtransactions, this module simulates them with savepoints.
 
 ```coffee
-t = new Transaction client
+t = new Transaction client, done
 t.start (err) ->
   t.nest (err, t2) ->
     t2.query "SELECT * FROM Characters", (err, result) ->
