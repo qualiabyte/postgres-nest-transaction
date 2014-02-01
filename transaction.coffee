@@ -8,21 +8,13 @@ class Transaction
   # Debug mode.
   @DEBUG: false
 
-  # Creates a new Transaction, using the given pg client.
+  # Creates a new Transaction, using a pooled pg client.
   #
   # Example:
   #
   #     pg          = require 'pg'
   #     Transaction = require 'pg-nest'
-  #
-  #     client = pg.connect "postgres://user:password@localhost:5432/db"
-  #     t = new Transaction( client )
-  #
-  #     t.start (err) ->
-  #       t.query "SELECT * FROM Characters", (err, result) ->
-  #         console.log result.rows
-  #
-  # Example with client pooling:
+  #     url         = "postgres://user:password@localhost:5432/db"
   #
   #     pg.connect url, (err, client, done) ->
   #       return callback err if err

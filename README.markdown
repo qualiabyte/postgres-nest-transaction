@@ -15,42 +15,28 @@ $ npm install pg-nest
 ```coffee
 pg          = require 'pg'
 Transaction = require 'pg-nest'
+url         = "postgres://user:password@localhost:5432/db"
 
-# Create a client connection the postgres database.
-client = pg.connect 'postgres://user:pass@localhost:5432/database'
-
-# Create a new transaction with the given pg client.
-t = new Transaction( client )
-
-# Start a new transaction with auto savepoint, and insert our hero!
-t.start (err) ->
-  t.query "INSERT INTO Characters VALUES ('Finn', 'human')", (err) ->
-
-    # Create a nested subtransaction with savepoint, and continue...
-    t.nest (err, t2) ->
-      t2.query "INSERT INTO Characters VALUES ('Ice King', 'wizard')", (err) ->
-
-        # Wrong character! ~_~ Cancel the subtransaction to rollback.
-        t2.cancel (err) ->
-
-          # Commit our work on the parent transaction.
-          t.finish (err) ->
-            console.log 'Saved Finn!' unless err
-```
-
-### Example with Client Pooling
-
-```coffee
 # Retrieve a pooled client connection.
 pg.connect url, (err, client, done) ->
-  return callback err if err
 
-  # Transaction will release the client on completion.
+  # Create a new transaction with the pooled pg client.
   t = new Transaction( client, done )
+
+  # Start a new transaction with auto savepoint, and insert our hero!
   t.start (err) ->
-    t.query "INSERT INTO Characters VALUES ('Lady', 'rainicorn')", (err, result) ->
-      t.finish (err) ->
-        console.log 'Released client!' unless err
+    t.query "INSERT INTO Characters VALUES ('Finn', 'human')", (err) ->
+
+      # Create a nested subtransaction with savepoint, and continue...
+      t.nest (err, t2) ->
+        t2.query "INSERT INTO Characters VALUES ('Ice King', 'wizard')", (err) ->
+
+          # Wrong character! ~_~ Cancel the subtransaction to rollback.
+          t2.cancel (err) ->
+
+            # Commit our work on the parent transaction.
+            t.finish (err) ->
+              console.log 'Saved Finn!' unless err
 ```
 
 ## API Overview
@@ -61,10 +47,6 @@ pg.connect url, (err, client, done) ->
 </tr>
 <tr>
   <th colspan=2 align=left><a href="#constructor">Constructor</a></th>
-</tr>
-<tr>
-  <td><code>new Transaction( client )</code></td>
-  <td><i>Creates a new transaction, using the given pg client.</i></td>
 </tr>
 <tr>
   <td><code>new Transaction( client, done )</code></td>
@@ -120,27 +102,22 @@ pg.connect url, (err, client, done) ->
 
 <a name="constructor"></a>
 
-### new Transaction(client)
 ### new Transaction(client, done)
 
-Creates a new transaction, using the given pg client.
+Creates a new transaction, using a pooled pg client.
 
 ```coffee
 pg          = require 'pg'
 Transaction = require 'pg-nest'
 
-client = pg.connect "postgres://user:password@localhost:5432/db"
-t = new Transaction( client )
-```
-
-When using client pooling, also pass the `done()` function provided by
-async calls to `pg.connect()`.
-
-```coffee
 pg.connect url, (err, client, done) ->
   t = new Transaction( client, done )
 ```
 
+Just pass the client instance and done() function
+provided by pg.connect().  
+When the transaction completes, it will automatically release the
+client by calling done().  
 See the [pg docs](https://github.com/brianc/node-postgres/wiki/pg) on
 `pg.connect()` for details.
 
